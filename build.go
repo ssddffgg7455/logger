@@ -8,8 +8,6 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-const logFileName = "log"
-
 var levelMap = map[string]zapcore.Level{
 	"DEBUG":  zapcore.DebugLevel,
 	"INFO":   zapcore.InfoLevel,
@@ -23,6 +21,9 @@ var levelMap = map[string]zapcore.Level{
 func checkConfig(config *Config) error {
 	if config == nil {
 		return fmt.Errorf("config is nil")
+	}
+	if len(config.LogFile) == 0 {
+		return fmt.Errorf("LogFile is nil")
 	}
 	if len(config.LogPath) == 0 {
 		return fmt.Errorf("logPath is nil")

@@ -13,6 +13,7 @@ import (
 // Config log 配置
 type Config struct {
 	Level        string // 日志分级 DEBUG, INFO, WARN, ERROR, DPANIC, PANIC, FATAL
+	LogFile      string // 日志文件
 	LogPath      string // 日志路径
 	MaxAge       int    // 最大保存时间 单位 day
 	RotationSize int64  // 日志文件滚动size 单位 M
@@ -53,7 +54,7 @@ func GetWriter(config *Config) (io.Writer, error) {
 		return nil, err
 	}
 	file, err := rotatelogs.New(
-		config.LogPath+"/"+logFileName+"-%Y%m%d%H.log",                            // 实际生成的文件名 log-YYmmddHH.log
+		config.LogPath+"/"+config.LogFile+"-%Y%m%d%H.log",                         // 实际生成的文件名 logFile-YYmmddHH.log
 		rotatelogs.WithMaxAge(time.Duration(config.MaxAge*24)*time.Hour),          // 最长保存MaxSaveDay天
 		rotatelogs.WithRotationTime(time.Duration(config.RotationTime)*time.Hour), // 24小时切割一次
 		rotatelogs.WithRotationSize(config.RotationSize*1024*1024),                // 分割日志的文件大小单位

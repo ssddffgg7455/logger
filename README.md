@@ -6,6 +6,7 @@
 ```
 sugarLog, err := logger.Init(&logger.Config{
 		Level:        level,        // 日志分级 DEBUG, INFO, WARN, ERROR, DPANIC, PANIC, FATAL
+		LogFile:      logFile,      // 日志文件
 		LogPath:      logPath,      // 日志路径
 		MaxAge:       maxAge,       // 最大保存时间 单位 day
 		RotationSize: rotationRize, // 日志文件滚动size 单位 M
