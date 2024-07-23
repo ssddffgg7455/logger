@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"time"
 
-	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -41,20 +40,6 @@ func checkConfig(config *Config) error {
 		return fmt.Errorf("rotationTime: %d must be positive", config.RotationTime)
 	}
 	return nil
-}
-
-func getWriter(config *Config) (zapcore.WriteSyncer, error) {
-	file, err := rotatelogs.New(
-		config.LogPath+"/"+logFileName+"-%Y%m%d%H.log",                            // 实际生成的文件名 log-YYmmddHH.log
-		rotatelogs.WithMaxAge(time.Duration(config.MaxAge*24)*time.Hour),          // 最长保存MaxSaveDay天
-		rotatelogs.WithRotationTime(time.Duration(config.RotationTime)*time.Hour), // 24小时切割一次
-		rotatelogs.WithRotationSize(config.RotationSize*1024*1024),                // 分割日志的文件大小单位
-	)
-	if err != nil {
-		file.Close()
-		return nil, err
-	}
-	return zapcore.AddSync(file), nil
 }
 
 func getEncoder() zapcore.Encoder {
