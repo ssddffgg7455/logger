@@ -23,10 +23,6 @@ var sugarLogger *zap.SugaredLogger
 
 // Init 初始化
 func Init(config *Config) (*zap.SugaredLogger, error) {
-	err := checkConfig(config)
-	if err != nil {
-		return nil, err
-	}
 	writer, err := GetWriter(config)
 	if err != nil {
 		return nil, fmt.Errorf("GetWriter err: %v", err)
@@ -52,6 +48,10 @@ func InitWithWriter(configLevel string, writer zapcore.WriteSyncer) (*zap.Sugare
 
 // GetWriter 根据配置获取writer 以供其他插件使用
 func GetWriter(config *Config) (io.Writer, error) {
+	err := checkConfig(config)
+	if err != nil {
+		return nil, err
+	}
 	file, err := rotatelogs.New(
 		config.LogPath+"/"+logFileName+"-%Y%m%d%H.log",                            // 实际生成的文件名 log-YYmmddHH.log
 		rotatelogs.WithMaxAge(time.Duration(config.MaxAge*24)*time.Hour),          // 最长保存MaxSaveDay天
