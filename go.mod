@@ -1,4 +1,4 @@
-module logger
+module github.com/ssddffgg7455/logger
 
 go 1.20
 
