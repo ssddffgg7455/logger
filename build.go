@@ -28,9 +28,6 @@ func checkConfig(config *Config) error {
 	if len(config.LogPath) == 0 {
 		return fmt.Errorf("logPath is nil")
 	}
-	if len(config.Level) == 0 {
-		return fmt.Errorf("level is nil")
-	}
 	if config.MaxAge <= 0 {
 		return fmt.Errorf("maxAge: %d must be positive", config.MaxAge)
 	}
@@ -59,4 +56,20 @@ func converLevel(configLevel string) zapcore.Level {
 
 func TimeEncoder(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
 	enc.AppendString(t.Format("2006-01-02 15:04:05.000000"))
+}
+
+func converArgs(args interface{}, v ...interface{}) (message string) {
+	switch t := args.(type) {
+	case error:
+		message = t.Error()
+	case string:
+		if len(v) > 0 {
+			message = fmt.Sprintf(t, v...)
+		} else {
+			message = t
+		}
+	default:
+		message = fmt.Sprint(t)
+	}
+	return
 }

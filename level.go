@@ -45,3 +45,41 @@ func ErrorwWithTrace(ctx context.Context, msg string, keysAndValues ...interface
 	keysAndValues = append([]interface{}{traceKey, traceId, "stack", stackInfo}, keysAndValues...)
 	sugarLogger.Errorw(msg, keysAndValues...)
 }
+
+// ------------------- 以下为 format string 格式输入 ----------------------------
+func Debug(ctx context.Context, tag string, args interface{}, v ...interface{}) {
+	msg := converArgs(args, v...)
+	traceId := GetTraceId(ctx)
+	sugarLogger.Debugw(msg, "tag", tag, traceKey, traceId)
+}
+
+func Info(ctx context.Context, tag string, args interface{}, v ...interface{}) {
+	msg := converArgs(args, v...)
+	traceId := GetTraceId(ctx)
+	sugarLogger.Infow(msg, "tag", tag, traceKey, traceId)
+}
+
+func Warning(ctx context.Context, tag string, args interface{}, v ...interface{}) {
+	msg := converArgs(args, v...)
+	traceId := GetTraceId(ctx)
+	sugarLogger.Warnw(msg, "tag", tag, traceKey, traceId)
+}
+
+func Error(ctx context.Context, tag string, args interface{}, v ...interface{}) {
+	msg := converArgs(args, v...)
+	traceId := GetTraceId(ctx)
+	sugarLogger.Errorw(msg, "tag", tag, traceKey, traceId)
+}
+
+func Fatal(ctx context.Context, tag string, args interface{}, v ...interface{}) {
+	msg := converArgs(args, v...)
+	traceId := GetTraceId(ctx)
+	sugarLogger.Fatalw(msg, "tag", tag, traceKey, traceId)
+}
+
+func ErrorWithTrace(ctx context.Context, tag string, args interface{}, v ...interface{}) {
+	msg := converArgs(args, v...)
+	traceId := GetTraceId(ctx)
+	stackInfo := string(debug.Stack())
+	sugarLogger.Errorw(msg, "tag", tag, traceKey, traceId, "stack", stackInfo)
+}
